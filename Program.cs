@@ -14,10 +14,10 @@ namespace FantasyChas_Backend
             var builder = WebApplication.CreateBuilder(args);
             DotNetEnv.Env.Load();
 
-            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+            //var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
             // Add services to the container.
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("AppDB"));
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
 

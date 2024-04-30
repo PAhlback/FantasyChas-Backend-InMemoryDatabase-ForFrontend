@@ -6,6 +6,8 @@ namespace FantasyChas_Backend.Repositories
     public interface ISpeciesRepository
     {
         public Species GetSpeciesById(int speciesId);
+        public Task AddSpeciesAsync();
+        public bool CheckIfSpeciesExist();
     }
 
     public class SpeciesRepository : ISpeciesRepository
@@ -15,6 +17,22 @@ namespace FantasyChas_Backend.Repositories
         public SpeciesRepository(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task AddSpeciesAsync()
+        {
+            Species species = new Species()
+            {
+                SpeciesName = "Människa"
+            };
+
+            await _context.Species.AddAsync(species);
+            await _context.SaveChangesAsync();
+        }
+
+        public bool CheckIfSpeciesExist()
+        {
+            return _context.Species.Any() ? true : false;
         }
 
         public Species GetSpeciesById(int speciesId)

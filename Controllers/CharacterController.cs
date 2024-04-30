@@ -47,6 +47,15 @@ namespace FantasyChas_Backend.Controllers
         {
             try
             {
+                if(!profRepo.CheckIfProfessionsExist())
+                {
+                    await profRepo.AddProfessionAsync();
+                }
+                if (!speciesRepo.CheckIfSpeciesExist())
+                {
+                    await speciesRepo.AddSpeciesAsync();
+                }
+
                 IdentityUser user = await GetCurrentUserAsync();
 
                 // här kommer vi göra om Dto till model
@@ -65,8 +74,8 @@ namespace FantasyChas_Backend.Controllers
                     Constitution = charDto.Constitution,
                     Charisma = charDto.Charisma,
                     Backstory = charDto.Backstory,
-                    Profession = profRepo.GetProfessionById(charDto.ProfessionId),
-                    Species = speciesRepo.GetSpeciesById(charDto.SpeciesId)
+                    Profession = profRepo.GetProfessionById(1),
+                    Species = speciesRepo.GetSpeciesById(1)
                 };
                 //spara i Db
                 repo.AddCharacterToUser(newCharacter);
