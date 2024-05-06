@@ -26,7 +26,9 @@ namespace FantasyChas_Backend
                 options.AddPolicy("AllowSpecificOrigins",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:3000");
+                        policy.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                     });
             });
 
