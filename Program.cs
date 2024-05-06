@@ -1,6 +1,7 @@
 
 using FantasyChas_Backend.Data;
 using FantasyChas_Backend.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenAI_API;
@@ -35,7 +36,7 @@ namespace FantasyChas_Backend
             // Choose what we want to include in the Identity object in the database?
             builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
             {
-
+                
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -48,6 +49,19 @@ namespace FantasyChas_Backend
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 1;
                 options.Password.RequiredUniqueChars = 0;
+            });
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/AccessDenied";
+                options.Cookie.Name = "YourAppCookieName";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.LoginPath = "/Login";
+                // ReturnUrlParameter requires 
+                //using Microsoft.AspNetCore.Authentication.Cookies;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
