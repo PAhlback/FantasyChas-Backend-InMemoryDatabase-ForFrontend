@@ -53,14 +53,8 @@ namespace FantasyChas_Backend
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
-                options.AccessDeniedPath = "/AccessDenied";
-                options.Cookie.Name = "YourAppCookieName";
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                options.LoginPath = "/Login";
-                // ReturnUrlParameter requires 
-                //using Microsoft.AspNetCore.Authentication.Cookies;
-                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.LoginPath = "/login";
                 options.SlidingExpiration = true;
             });
 
@@ -77,7 +71,6 @@ namespace FantasyChas_Backend
             var app = builder.Build();
 
             app.MapIdentityApi<IdentityUser>();
-            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -106,6 +99,7 @@ namespace FantasyChas_Backend
 
             app.UseCors("AllowSpecificOrigins");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
