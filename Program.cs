@@ -21,6 +21,15 @@ namespace FantasyChas_Backend
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:3000");
+                    });
+            });
+
             // Choose what we want to include in the Identity object in the database?
             builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
             {
@@ -52,6 +61,7 @@ namespace FantasyChas_Backend
             var app = builder.Build();
 
             app.MapIdentityApi<IdentityUser>();
+            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -60,6 +70,8 @@ namespace FantasyChas_Backend
                 app.UseSwaggerUI();
             }
 
+
+
             // REMOVE this endpoint when ready
             app.MapGet("/user/character", () =>
             {
@@ -67,7 +79,16 @@ namespace FantasyChas_Backend
                 return Results.Ok("Hello!");
             }).RequireAuthorization();
 
+            app.MapGet("/hello", () =>
+            {
+                return Results.Ok("Hello world!");
+            });
+
+
+
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowSpecificOrigins");
 
             app.UseAuthorization();
 
